@@ -1,0 +1,6 @@
+[submodule "Dependencies/picohttpparser"]
+	path = Dependencies/picohttpparser
+	url = git@github.com:h2o/picohttpparser.git
+[submodule "Dependencies/picojson"]
+	path = Dependencies/picojson
+	url = git@github.com:kazuho/picojson.git
