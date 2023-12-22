@@ -26,7 +26,7 @@ jobs:
       - name: Install VCPKG
         run: |
           git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
-          ${{ matrix.VCPKG_BOOTSTRAP_CMD}
+          ${{ matrix.VCPKG_BOOTSTRAP_CMD }}
       - uses: actions/checkout@v3
       - name: Build project
         run: |
