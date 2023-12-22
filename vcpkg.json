@@ -1,0 +1,7 @@
+{
+  "dependencies": [
+    "asio"
+  ],
+  "name": "ecspressp",
+  "version": "1"
+}
