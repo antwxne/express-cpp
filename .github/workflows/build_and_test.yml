@@ -32,7 +32,7 @@ jobs:
           ${{ github.workspace }}/${{ matrix.VCPKG_BOOTSTRAP_CMD }}
       - name: Build project
         run: |
-          make -B build &>> build_log.txt
+          cmake -B build &>> build_log.txt
           cmake --build build &>> build_log.txt
       - name: Upload Build log
         uses: actions/upload-artifact@v3
