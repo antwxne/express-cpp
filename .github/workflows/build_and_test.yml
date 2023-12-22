@@ -23,7 +23,7 @@ jobs:
     env:
       CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
       TARGET_NAME: ecspressp
-      CMAKE_BUILD_TYPE: Release
+      BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,5 +34,5 @@ jobs:
           ${{ github.workspace }}/${{ matrix.VCPKG_BOOTSTRAP_CMD }}
       - name: Build project
         run: |
-          cmake -B build
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           cmake --build build --target ${{ env.TARGET_NAME }}
