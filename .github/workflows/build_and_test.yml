@@ -15,11 +15,19 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
+        include:
+          - os: windows-latest
+            VCPKG_BOOTSTRAP_CMD: ${{ github.workspace }}\vcpkg\bootstrap-vcpkg.bat
+          - os: ubuntu-latest
+            VCPKG_BOOTSTRAP_CMD: ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh
     env:
       CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
     steps:
+      - name: Install VCPKG
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
+          ${{ matrix.VCPKG_BOOTSTRAP_CMD}
       - uses: actions/checkout@v3
-      - uses: lukka/run-vcpkg@v11
       - name: Build project
         run: |
           cmake -B build &>> build_log.txt
