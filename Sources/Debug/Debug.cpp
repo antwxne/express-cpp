@@ -9,7 +9,7 @@
 
 #ifdef DEBUG
 
-#include <iostream>
+    #include <iostream>
 
 static const char *ORANGE = "\033[38;5;208m";
 
@@ -56,27 +56,27 @@ void Debug::err(const MyException &e) noexcept
 
 #else
 
-void Debug::log(const std::string &str) noexcept
+void Debug::log([[maybe_unused]]const std::string &str) noexcept
 {
 }
 
-void Debug::warn(const std::string &str) noexcept
+void Debug::warn([[maybe_unused]]const std::string &str) noexcept
 {
 }
 
-void Debug::err(const std::string &str) noexcept
+void Debug::err([[maybe_unused]]const std::string &str) noexcept
 {
 }
 
-void Debug::log(const MyException &str) noexcept
+void Debug::log([[maybe_unused]]const MyException &str) noexcept
 {
 }
 
-void Debug::warn(const MyException &str) noexcept
+void Debug::warn([[maybe_unused]]const MyException &str) noexcept
 {
 }
 
-void Debug::err(const MyException &str) noexcept
+void Debug::err([[maybe_unused]]const MyException &str) noexcept
 {
 }
 

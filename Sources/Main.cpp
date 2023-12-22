@@ -1,8 +1,7 @@
-#include <iostream>
-
-#include "Queue/QueueImplem.hpp"
+#include "Debug/Debug.hpp"
 
 int main()
 {
+    Debug::err("PLOP");
     return 0;
 }
