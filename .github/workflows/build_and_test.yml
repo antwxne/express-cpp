@@ -1,33 +1,36 @@
-#name: Build and Test
-#on:
-#  push:
-#    branches:
-#      - master
-#      - main
-#  pull_request:
-#    branches:
-#      - master
-#      - main
-#jobs:
-#  build:
-#    name: Build project
-#    runs-on: ubuntu-latest
-#    container:
-#      image: epitechcontent/epitest-docker:latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Clean repository
-#        continue-on-error: true
-#        run: make fclean >> build_log.txt
-#      - name: Build project
-#        run: make &>> build_log.txt
-#      - name: Upload Build log
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: Build_log
-#          path: |
-#            build_log.txt
-#          retention-days: 7
+name: Build and Test
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+jobs:
+  build-ubuntu:
+    name: Build project
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+    steps:
+      - uses: actions/checkout@v3
+      - uses: lukka/run-vcpkg@v11
+      - name: Build project
+        run: |
+          cmake -B build &>> build_log.txt
+          cmake --build build &>> build_log.txt
+      - name: Upload Build log
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build_log
+          path: |
+            build_log.txt
+          retention-days: 7
 #  unit_tests:
 #    name: Run unit tests
 #    runs-on: ubuntu-latest
