@@ -9,7 +9,7 @@ find_package(asio CONFIG REQUIRED)
 include(lib/pico.cmake)
 include(Sources/Sources.cmake)
 
-set(MAIN Sources/Main.cpp)
+#set(MAIN Sources/Main.cpp)
 set(SRC ${PICO_SRC}
         ${SRC}
 )
