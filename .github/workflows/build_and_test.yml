@@ -23,7 +23,9 @@ jobs:
     env:
       CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Install VCPKG
         run: |
           git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
