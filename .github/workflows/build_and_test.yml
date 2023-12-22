@@ -21,13 +21,13 @@ jobs:
           - os: ubuntu-latest
             VCPKG_BOOTSTRAP_CMD: vcpkg/bootstrap-vcpkg.sh
     env:
-      CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}vcpkg/scripts/buildsystems/vcpkg.cmake
+      CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
     steps:
       - uses: actions/checkout@v3
       - name: Install VCPKG
         run: |
-          git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}vcpkg
-          ${{ github.workspace }}${{ matrix.VCPKG_BOOTSTRAP_CMD }}
+          git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
+          ${{ github.workspace }}/${{ matrix.VCPKG_BOOTSTRAP_CMD }}
           pwd
           ls -R
       - name: Build project
