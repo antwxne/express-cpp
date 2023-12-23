@@ -11,8 +11,14 @@ namespace ecspressp {
 
 class NetworkHandler {
 private:
-    class Client{
-
+    class Client {
+    public:
+        Client(asio::io_context &ioContext);
+        ~Client() = default;
+        int GetSocketFd();
+    public:
+        asio::ip::tcp::socket socket;
+        std::vector<uint8_t> buffer;
     };
 
 public:
@@ -21,16 +27,16 @@ public:
     void Start();
 private:
     void StartAccept();
-    void AcceptHandler();
-    void StartReceive();
-    void ReceiveHandler();
-    void Send();
+    void AcceptHandler(Client &client);
+    void StartReceive(Client &client);
+    void ReceiveHandler(Client &client, const std::error_code error,
+        std::size_t bytes_transfered
+    );
+    //    void Send();
 private:
-    asio::ip::tcp::acceptor _acceptor;
     asio::io_context _io_context;
-    std::vector<Client> _clients;
-
-
+    asio::ip::tcp::acceptor _acceptor;
+    std::vector<std::unique_ptr<Client>> _clients;
 };
 } // ecspressp
 

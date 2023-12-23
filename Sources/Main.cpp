@@ -1,11 +1,10 @@
-#include "Debug/Debug.hpp"
+#include "Network/NetworkHandler.hpp"
 
 int main()
 {
-    Debug::err("PLOP");
+    ecspressp::NetworkHandler app;
 
-    int a;
-    a += 1;
+    app.Start();
 
     return 0;
 }
