@@ -25,7 +25,7 @@ static const char *UNDERLINED = "\033[4m";
 
 void Debug::log(const std::string &str) noexcept
 {
-    std::cerr << GREEN << "[LOG] " << RESET << str << std::endl;
+    std::cerr << GREEN << "[LOG] " << RESET << str << std::endl << std::flush;
 }
 
 void Debug::warn(const std::string &str) noexcept
@@ -35,8 +35,8 @@ void Debug::warn(const std::string &str) noexcept
 
 void Debug::err(const std::string &str) noexcept
 {
-    std::cerr << RED << UNDERLINED << BOLD << "[ERROR]"<< RESET << " " << str
-        << std::endl;
+    std::cerr << RED << UNDERLINED << BOLD << "[ERROR]" << RESET << " " << str
+        << std::endl << std::flush;
 }
 
 void Debug::log(const MyException &e) noexcept
@@ -51,7 +51,8 @@ void Debug::warn(const MyException &e) noexcept
 
 void Debug::err(const MyException &e) noexcept
 {
-    std::cerr << RED << UNDERLINED << BOLD << "[ERROR]" << RESET << " "  << e << std::endl;
+    std::cerr << RED << UNDERLINED << BOLD << "[ERROR]" << RESET << " " << e
+        << std::endl;
 }
 
 #else
