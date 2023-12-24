@@ -10,6 +10,13 @@ set(TOOLS_SRC
 
 set(SRC
         ${TOOLS_SRC}
-        Sources/Network/NetworkHandler.cpp
-        Sources/Network/NetworkHandler.hpp
+        Sources/ECsPressPapp.cpp
+        Sources/ECsPressPapp.hpp
+        Sources/Network/HTTP.cpp
+        Sources/Network/HTTP.hpp
+        Sources/Network/INetwork.hpp
+        Sources/Network/HttpRequest.cpp
+        Sources/Network/HttpRequest.hpp
+        Sources/Network/HttpResponse.cpp
+        Sources/Network/HttpResponse.hpp
 )
