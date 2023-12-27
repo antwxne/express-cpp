@@ -5,6 +5,8 @@
 #ifndef ECSPRESSP_INPUTQUEUE_HPP
 #define ECSPRESSP_INPUTQUEUE_HPP
 
+#include <optional>
+
 namespace ecspressp {
 
 template<typename T>

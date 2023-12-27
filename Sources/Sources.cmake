@@ -19,4 +19,6 @@ set(SRC
         Sources/Network/HttpRequest.hpp
         Sources/Network/HttpResponse.cpp
         Sources/Network/HttpResponse.hpp
+        Sources/Network/RequestsHandler/RequestHandler.cpp
+        Sources/Network/RequestsHandler/RequestHandler.hpp
 )

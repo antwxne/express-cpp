@@ -17,30 +17,34 @@ private:
         Client(asio::io_context &ioContext);
         ~Client() = default;
         int GetSocketFd();
+        void operator>>(HTTPContext &context) const;
+        bool operator==(const HTTPContext &context) const;
+        void operator<<(const HTTPResponse &response);
     public:
         asio::ip::tcp::socket socket;
-        std::vector<uint8_t> buffer;
+        std::vector<uint8_t> readBuffer;
+        std::vector<uint8_t> sendBuffer;
     };
 
 public:
     HTTP();
     ~HTTP() = default;
-    void Start(ecspressp::WriteOnlyQueue<HTTPRequest> &requestQueue,
-        ReadOnlyQueue<HTTPResponse> &responseQueue
+    void Start(ecspressp::WriteOnlyQueue<Request> &requestQueue,
+        ReadOnlyQueue<Response> &responseQueue
     ) override final;
 private:
-    void StartAccept(ecspressp::WriteOnlyQueue<HTTPRequest> &requestQueue);
+    void StartAccept(ecspressp::WriteOnlyQueue<Request> &requestQueue);
     void AcceptHandler(Client &client,
-        ecspressp::WriteOnlyQueue<HTTPRequest> &requestQueue
+        ecspressp::WriteOnlyQueue<Request> &requestQueue
     );
     void StartReceive(Client &client,
-        ecspressp::WriteOnlyQueue<HTTPRequest> &requestQueue
+        ecspressp::WriteOnlyQueue<Request> &requestQueue
     );
     void ReceiveHandler(Client &client,
-        ecspressp::WriteOnlyQueue<HTTPRequest> &requestQueue,
+        ecspressp::WriteOnlyQueue<Request> &requestQueue,
         const std::error_code error, std::size_t bytes_transfered
     );
-    //    void Send();
+    void Send(ecspressp::ReadOnlyQueue<Response> &responseQueue);
 private:
     asio::io_context _io_context;
     asio::ip::tcp::acceptor _acceptor;

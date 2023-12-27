@@ -1,12 +1,10 @@
+#include "ECsPressPapp.hpp"
 #include "Network/HTTP.hpp"
-#include "Queue/QueueImplem.hpp"
 
 int main()
 {
-    ecspressp::HTTP app;
-    ecspressp::QueueImplem<ecspressp::HTTPRequest> input_queue;
-    ecspressp::QueueImplem<ecspressp::HTTPResponse> output_queue;
-    app.Start(input_queue, output_queue);
+    ecspressp::eCsPressPAPP<ecspressp::HTTP> app;
 
+    app.Start();
     return 0;
 }

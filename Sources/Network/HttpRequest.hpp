@@ -18,8 +18,7 @@ struct HTTPRequest {
     std::map<std::string, std::string> headers;
     std::vector<u_int8_t> body;
     HTTPRequest() = default;
-    struct HTTPRequest &operator<<(std::vector<u_int8_t> &rawRequest);
-    void operator>>(std::vector<u_int8_t> &outputBuffer) const;
+    void operator<<(std::vector<u_int8_t> &rawRequest);
 };
 } // ecspressp
 
