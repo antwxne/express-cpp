@@ -30,7 +30,7 @@ void RequestHandler::HandleRequests(ReadOnlyQueue<Request> &requestQueue,
 )
 {
     while (requestQueue.IsEmpty());
-    const auto &&maybeRequest = requestQueue.Pop();
+    const auto maybeRequest = requestQueue.Pop();
     if (!maybeRequest) {
         return;
     }

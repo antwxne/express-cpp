@@ -58,6 +58,7 @@ void HTTP::StartReceive(Client &client,
 )
 {
     const std::string delimiter = "\r\n\r\n";
+    // TODO a changer par un async read sinon overflow si on envoie n'importe quoi
     asio::async_read_until(client.socket,
         asio::dynamic_buffer(client.readBuffer), delimiter,
         std::bind(&HTTP::ReceiveHandler, this, std::ref(client),
