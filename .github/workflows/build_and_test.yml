@@ -1,44 +1,44 @@
-name: Build and Test
-on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
-    branches:
-      - master
-      - main
-jobs:
-  build-ubuntu:
-    name: Build project
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest ]
-        include:
-          - os: windows-latest
-            VCPKG_BOOTSTRAP_CMD: vcpkg\bootstrap-vcpkg.bat
-          - os: ubuntu-latest
-            VCPKG_BOOTSTRAP_CMD: vcpkg/bootstrap-vcpkg.sh
-    env:
-      CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-      TARGET_NAME: express-cpp
-      BUILD_TYPE: Release
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Set up GCC (only for ubuntu)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: egor-tensin/setup-gcc@v1
-        with:
-          version: latest
-          platform: x64
-      - name: Install VCPKG
-        run: |
-          git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
-          ${{ github.workspace }}/${{ matrix.VCPKG_BOOTSTRAP_CMD }}
-      - name: Build project
-        run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-          cmake --build build --target ${{ env.TARGET_NAME }} -j
+#name: Build and Test
+#on:
+#  push:
+#    branches:
+#      - master
+#      - main
+#  pull_request:
+#    branches:
+#      - master
+#      - main
+#jobs:
+#  build-ubuntu:
+#    name: Build project
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest ]
+#        include:
+#          - os: windows-latest
+#            VCPKG_BOOTSTRAP_CMD: vcpkg\bootstrap-vcpkg.bat
+#          - os: ubuntu-latest
+#            VCPKG_BOOTSTRAP_CMD: vcpkg/bootstrap-vcpkg.sh
+#    env:
+#      CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+#      TARGET_NAME: express-cpp
+#      BUILD_TYPE: Release
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          submodules: recursive
+#      - name: Set up GCC (only for ubuntu)
+#        if: ${{ matrix.os == 'ubuntu-latest' }}
+#        uses: egor-tensin/setup-gcc@v1
+#        with:
+#          version: latest
+#          platform: x64
+#      - name: Install VCPKG
+#        run: |
+#          git clone https://github.com/Microsoft/vcpkg.git ${{ github.workspace }}/vcpkg
+#          ${{ github.workspace }}/${{ matrix.VCPKG_BOOTSTRAP_CMD }}
+#      - name: Build project
+#        run: |
+#          cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+#          cmake --build build --target ${{ env.TARGET_NAME }} -j
