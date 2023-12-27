@@ -26,6 +26,25 @@ public:
     void Route(const std::string &method, const std::string &route,
         RouteCallback &&callback
     );
+    void Get(const std::string &route, RouteCallback &&callback
+    );
+    void Head(const std::string &route, RouteCallback &&callback
+    );
+    void Post(const std::string &route, RouteCallback &&callback
+    );
+    void Put(const std::string &route, RouteCallback &&callback
+    );
+    void Delete(const std::string &route, RouteCallback &&callback
+    );
+    void Connect(const std::string &route, RouteCallback &&callback
+    );
+    void Options(const std::string &route, RouteCallback &&callback
+    );
+    void Trace(const std::string &route, RouteCallback &&callback
+    );
+    void Patch(const std::string &route, RouteCallback &&callback
+    );
+    void UseStatic(const std::string &path);
     void StartHandle(ReadOnlyQueue<Request> &requestQueue,
         WriteOnlyQueue<Response> &responseQueue, bool &shouldStop
     );
@@ -40,8 +59,10 @@ private:
         WriteOnlyQueue<Response> &responseQueue
     );
     void SetHeadersToResponse(HTTPResponse &response);
+    void GetStaticFile(const HTTPRequest &request, HTTPResponse &response);
 
 private:
+    std::vector<std::string> _staticPaths;
     Headers _globalHeaders;
     MethodsRegistry _methodsRegistry;
 };

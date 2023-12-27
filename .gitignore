@@ -1,3 +1,4 @@
+STATIC
 cmake-build-debug
 *.gc*
 cmake-build-release

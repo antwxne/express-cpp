@@ -18,6 +18,7 @@ int main()
             res.headers["Content-Type"] = "text/html";
             res.send("<h1>PLOP</h1>");
         });
+    app.Router().UseStatic("/home/antoine/Perso/express-cpp/STATIC");
     app.Start();
     return 0;
 }

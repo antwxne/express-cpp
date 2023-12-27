@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include <format>
+#include <fstream>
 
 #include "RequestHandler.hpp"
 #include "Debug/Debug.hpp"
@@ -40,8 +41,13 @@ void RequestHandler::HandleRequests(ReadOnlyQueue<Request> &requestQueue,
 
     newResponse.headers = _globalHeaders;
     try {
-        _methodsRegistry.at(request.second.method).at(request.second.route)(
-            request.second, newResponse);
+
+        try {
+            GetStaticFile(request.second, newResponse);
+        } catch (std::runtime_error &e) {
+            _methodsRegistry.at(request.second.method).at(request.second.route)(
+                request.second, newResponse);
+        }
     } catch (std::out_of_range &_) {
         newResponse.status(404, "Not Found");
     }
@@ -62,5 +68,74 @@ void RequestHandler::SetHeadersToResponse(HTTPResponse &response)
         }
     }
     response.headers["Content-Length"] = std::to_string(response.body.size());
+}
+
+void RequestHandler::Get(const std::string &route, RouteCallback &&callback)
+{
+    Route("GET", route, std::move(callback));
+}
+
+void RequestHandler::Head(const std::string &route, RouteCallback &&callback)
+{
+    Route("HEAD", route, std::move(callback));
+}
+
+void RequestHandler::Post(const std::string &route, RouteCallback &&callback)
+{
+    Route("POST", route, std::move(callback));
+}
+
+void RequestHandler::Put(const std::string &route, RouteCallback &&callback)
+{
+    Route("PUT", route, std::move(callback));
+}
+
+void RequestHandler::Delete(const std::string &route, RouteCallback &&callback)
+{
+    Route("DELETE", route, std::move(callback));
+}
+
+void RequestHandler::Connect(const std::string &route, RouteCallback &&callback)
+{
+    Route("CONNECT", route, std::move(callback));
+}
+
+void RequestHandler::Options(const std::string &route, RouteCallback &&callback)
+{
+    Route("OPTIONS", route, std::move(callback));
+}
+
+void RequestHandler::Trace(const std::string &route, RouteCallback &&callback)
+{
+    Route("TRACE", route, std::move(callback));
+}
+
+void RequestHandler::Patch(const std::string &route, RouteCallback &&callback)
+{
+    Route("PATCH", route, std::move(callback));
+}
+
+void RequestHandler::UseStatic(const std::string &path)
+{
+    _staticPaths.push_back(path);
+}
+
+void RequestHandler::GetStaticFile(const HTTPRequest &request,
+    HTTPResponse &response
+)
+{
+    for (const auto &staticFolder: _staticPaths) {
+        std::string path = std::format("{}/{}", staticFolder, request.route);
+        std::ifstream file(path, std::ios::binary);
+        if (file.is_open()) {
+            std::vector<u_int8_t> data((std::istreambuf_iterator<char>(file)),
+                std::istreambuf_iterator<char>());
+            response.body = data;
+            file.close();
+            return;
+        }
+    }
+    throw std::runtime_error(
+        std::format("file: {} not found in the server", request.route));
 }
 } // express_cpp
