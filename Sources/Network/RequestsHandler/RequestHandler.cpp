@@ -8,7 +8,7 @@
 #include "RequestHandler.hpp"
 #include "Debug/Debug.hpp"
 
-namespace ecspressp {
+namespace express_cpp {
 void RequestHandler::StartHandle(ReadOnlyQueue<Request> &requestQueue,
     WriteOnlyQueue<Response> &responseQueue, bool &shouldStop
 )
@@ -63,4 +63,4 @@ void RequestHandler::SetHeadersToResponse(HTTPResponse &response)
     }
     response.headers["Content-Length"] = std::to_string(response.body.size());
 }
-} // ecspressp
+} // express_cpp

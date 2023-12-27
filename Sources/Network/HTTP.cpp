@@ -5,23 +5,26 @@
 #include "HTTP.hpp"
 #include "Debug/Debug.hpp"
 
-namespace ecspressp {
-HTTP::HTTP()
-    : _io_context(),
-    _acceptor(_io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 8080))
+namespace express_cpp {
+HTTP::HTTP(uint16_t port, const std::string &address)
+    : _io_context(), _acceptor(_io_context,
+    asio::ip::tcp::endpoint(asio::ip::address_v4(ParseAddress(address)), port))
 {
 }
 
-void HTTP::Start(ecspressp::WriteOnlyQueue<Request> &requestQueue,
+void HTTP::Start(express_cpp::WriteOnlyQueue<Request> &requestQueue,
     ReadOnlyQueue<Response> &responseQueue
 )
 {
     StartAccept(requestQueue);
     _io_context.post(std::bind(&HTTP::Send, this, std::ref(responseQueue)));
+    Debug::log(std::format("Server listening on http://{}:{}",
+        _acceptor.local_endpoint().address().to_string(),
+        _acceptor.local_endpoint().port()));
     _io_context.run();
 }
 
-void HTTP::StartAccept(ecspressp::WriteOnlyQueue<Request> &requestQueue)
+void HTTP::StartAccept(express_cpp::WriteOnlyQueue<Request> &requestQueue)
 {
     auto new_client = std::make_unique<Client>(_io_context);
 
@@ -38,7 +41,7 @@ void HTTP::StartAccept(ecspressp::WriteOnlyQueue<Request> &requestQueue)
 }
 
 void HTTP::AcceptHandler(Client &client,
-    ecspressp::WriteOnlyQueue<Request> &requestQueue
+    express_cpp::WriteOnlyQueue<Request> &requestQueue
 )
 {
     if (client.GetSocketFd() < 0) {
@@ -51,7 +54,7 @@ void HTTP::AcceptHandler(Client &client,
 }
 
 void HTTP::StartReceive(Client &client,
-    ecspressp::WriteOnlyQueue<Request> &requestQueue
+    express_cpp::WriteOnlyQueue<Request> &requestQueue
 )
 {
     const std::string delimiter = "\r\n\r\n";
@@ -63,7 +66,7 @@ void HTTP::StartReceive(Client &client,
 }
 
 void HTTP::ReceiveHandler(Client &client,
-    ecspressp::WriteOnlyQueue<Request> &requestQueue,
+    express_cpp::WriteOnlyQueue<Request> &requestQueue,
     const std::error_code error, std::size_t bytes_transfered
 )
 {
@@ -104,6 +107,18 @@ void HTTP::Send(ReadOnlyQueue<Response> &responseQueue)
     _io_context.post(std::bind(&HTTP::Send, this, std::ref(responseQueue)));
 }
 
+asio::ip::address_v4::bytes_type HTTP::ParseAddress(const std::string &address)
+{
+    // from https://stackoverflow.com/a/5328190
+    std::stringstream s(address);
+    int a, b, c, d; //to store the 4 ints
+    char ch; //to temporarily store the '.'
+    s >> a >> ch >> b >> ch >> c >> ch >> d;
+    return asio::ip::address_v4::bytes_type(
+        {static_cast<uint8_t>(a), static_cast<uint8_t>(b),
+            static_cast<uint8_t>(c), static_cast<uint8_t>(d)});
+}
+
 int HTTP::Client::GetSocketFd()
 {
     return socket.native_handle();
@@ -128,9 +143,7 @@ bool HTTP::Client::operator==(const HTTPContext &context) const
 
 void HTTP::Client::operator<<(const HTTPResponse &response)
 {
-    auto a = 0;
     response >> sendBuffer;
-    auto b = 0;
     socket.async_send(asio::buffer(sendBuffer),
         [&]([[maybe_unused]]const asio::error_code &error,
             const std::size_t bytes_transfered
@@ -140,4 +153,4 @@ void HTTP::Client::operator<<(const HTTPResponse &response)
                 client_endpoint.address().to_string(), client_endpoint.port()));
         });
 }
-} // ecspressp
+} // express_cpp

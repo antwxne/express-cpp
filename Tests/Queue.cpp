@@ -6,8 +6,9 @@
 #include <iostream>
 #include "Queue/QueueImplem.hpp"
 
-using namespace ecspressp;
-TEST(Queue, basic) {
+using namespace express_cpp;
+TEST(Queue, basic)
+{
     QueueImplem<int> queue;
     queue.Push(1);
     queue.Push(2);
@@ -16,7 +17,9 @@ TEST(Queue, basic) {
     EXPECT_EQ(queue.Pop(), 2);
     EXPECT_EQ(queue.IsEmpty(), true);
 }
-TEST(Queue, should_throw) {
+
+TEST(Queue, should_throw)
+{
     QueueImplem<int> queue;
     queue.Push(1);
     queue.Push(2);
@@ -27,7 +30,8 @@ TEST(Queue, should_throw) {
     EXPECT_EQ(queue.Pop().has_value(), false);
 }
 
-TEST(Queue, initializer_list_constructor) {
+TEST(Queue, initializer_list_constructor)
+{
     QueueImplem<int> queue{1, 2};
     EXPECT_EQ(queue.Pop(), 1);
     EXPECT_EQ(queue.IsEmpty(), false);

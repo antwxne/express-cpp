@@ -7,7 +7,7 @@
 #include "HttpRequest.hpp"
 #include "picohttpparser.h"
 
-namespace ecspressp {
+namespace express_cpp {
 void HTTPRequest::operator<<(std::vector<u_int8_t> &rawRequest
 )
 {
@@ -43,4 +43,4 @@ void HTTPRequest::operator<<(std::vector<u_int8_t> &rawRequest
     body.resize(contentLength);
     std::memcpy(body.data(), &*(buffer.end() - contentLength), contentLength);
 }
-} // ecspressp
+} // express_cpp

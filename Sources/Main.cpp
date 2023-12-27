@@ -3,15 +3,18 @@
 
 int main()
 {
-    ecspressp::eCsPressPAPP<ecspressp::HTTP> app;
+    express_cpp::Config config;
+    config.appName = "TEST";
+    config.port = 9090;
+    express_cpp::ExpressCPPApp<express_cpp::HTTP> app(config);
 
     app.Router().Route("GET", "/",
-        [](const auto &req, ecspressp::HTTPResponse &res) {
+        []([[maybe_unused]]const auto &req, express_cpp::HTTPResponse &res) {
             res.headers["Content-Type"] = "text/html";
             res.send("<h1>Hello World</h1>");
         });
     app.Router().Route("GET", "/plop",
-        [](const auto &req, ecspressp::HTTPResponse &res) {
+        []([[maybe_unused]]const auto &req, express_cpp::HTTPResponse &res) {
             res.headers["Content-Type"] = "text/html";
             res.send("<h1>PLOP</h1>");
         });

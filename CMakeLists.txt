@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 
-set(BIN_NAME ecspressp)
+set(BIN_NAME express-cpp)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE "RELEASE" CACHE STRING "Sets release build by default")
@@ -19,13 +19,13 @@ else ()
 endif ()
 
 
-project(eCsPressP)
+project(express-cpp)
 find_package(asio CONFIG REQUIRED)
 include(lib/pico.cmake)
 include(Sources/Sources.cmake)
 
 set(MAIN Sources/Main.cpp
-        
+
 )
 set(SRC ${PICO_SRC}
         ${SRC}

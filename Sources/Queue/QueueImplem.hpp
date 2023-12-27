@@ -13,7 +13,7 @@
 #include "ReadOnlyQueue.hpp"
 #include "WriteOnlyQueue.hpp"
 
-namespace ecspressp {
+namespace express_cpp {
 
 template<typename T>
 class QueueImplem : public ReadOnlyQueue<T>, public WriteOnlyQueue<T> {

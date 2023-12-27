@@ -12,46 +12,69 @@
 #include "Network/RequestsHandler/RequestHandler.hpp"
 #include "Network/INetwork.hpp"
 
-namespace ecspressp {
+namespace express_cpp {
+struct Config {
+    Config()
+    {
+        port = 8080;
+        address = "0.0.0.0";
+        appName = "eCsPressP";
+        threadsNumber = 1;
+    }
+
+    short port;
+    std::string address;
+    std::string appName;
+    std::size_t threadsNumber;
+};
+
 template<typename Network>
-class eCsPressPAPP {
+class ExpressCPPApp {
 public:
-    explicit eCsPressPAPP(int port = 8080,
-        const std::string appName = "eCsPressP_APP"
-    );
+    explicit ExpressCPPApp(const Config &config);
+    explicit ExpressCPPApp() = default;
     void Start();
     RequestHandler &Router();
 
 private:
     Network _networkHandler;
     RequestHandler _requestHandler;
-    ecspressp::QueueImplem<ecspressp::Request> input_queue;
-    ecspressp::QueueImplem<ecspressp::Response> output_queue;
+    express_cpp::QueueImplem<express_cpp::Request> _input_queue;
+    express_cpp::QueueImplem<express_cpp::Response> _output_queue;
+    std::size_t _threadsNumber;
 };
 
 template<typename Network>
-eCsPressPAPP<Network>::eCsPressPAPP(int port, const std::string appName)
+ExpressCPPApp<Network>::ExpressCPPApp(const Config &config): _networkHandler(
+    config.port, config.address), _requestHandler(), _input_queue(),
+    _output_queue(), _threadsNumber(config.threadsNumber)
 {
-    _requestHandler.SetGlobalHeaders({{"User-Agent", appName}});
+    _requestHandler.SetGlobalHeaders({{"User-Agent", config.appName}});
 }
 
 template<typename Network>
-RequestHandler &eCsPressPAPP<Network>::Router()
+RequestHandler &ExpressCPPApp<Network>::Router()
 {
     return _requestHandler;
 }
 
 template<typename Network>
-void eCsPressPAPP<Network>::Start()
+void ExpressCPPApp<Network>::Start()
 {
     QueueImplem<Request> requestsQueue;
     QueueImplem<Response> responsesQueue;
     bool shouldStop = false;
-    std::thread requests(
-        std::bind(&RequestHandler::StartHandle, _requestHandler,
-            std::ref(requestsQueue), std::ref(responsesQueue),
-            std::ref(shouldStop)));
+    std::vector<std::thread> threads;
+    for (size_t i = 0; i < _threadsNumber; ++i) {
+        threads.emplace_back(
+            std::bind(&RequestHandler::StartHandle, _requestHandler,
+                std::ref(requestsQueue), std::ref(responsesQueue),
+                std::ref(shouldStop)));
+    }
     _networkHandler.Start(requestsQueue, responsesQueue);
+    std::for_each(threads.begin(), threads.end(), [](std::thread &thread) {
+        thread.join();
+    });
 }
 }
 

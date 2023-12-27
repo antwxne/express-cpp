@@ -5,13 +5,13 @@
 #ifndef ECSPRESSP_WRITEONLYQUEUE_HPP
 #define ECSPRESSP_WRITEONLYQUEUE_HPP
 
-namespace ecspressp {
+namespace express_cpp {
 
 template<typename T>
 class WriteOnlyQueue {
 public:
     virtual void Push(T &&elem) = 0;
 };
-} // ecspressp
+} // express_cpp
 
 #endif //ECSPRESSP_WRITEONLYQUEUE_HPP

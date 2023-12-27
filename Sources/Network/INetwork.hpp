@@ -10,7 +10,7 @@
 #include "Network/HttpRequest.hpp"
 #include "Network/HttpResponse.hpp"
 
-namespace ecspressp {
+namespace express_cpp {
 
 struct HTTPContext {
     HTTPContext() = default;
@@ -25,10 +25,10 @@ using Response = std::pair<HTTPContext, HTTPResponse>;
 
 class INetwork {
 public:
-    virtual void Start(ecspressp::WriteOnlyQueue<Request> &requestQueue,
+    virtual void Start(express_cpp::WriteOnlyQueue<Request> &requestQueue,
         ReadOnlyQueue<Response> &responseQueue
     ) = 0;
 };
-} // ecspressp
+} // express_cpp
 
 #endif //ECSPRESSP_INETWORK_HPP

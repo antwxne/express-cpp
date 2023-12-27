@@ -9,7 +9,7 @@
 #include <map>
 #include <vector>
 
-namespace ecspressp {
+namespace express_cpp {
 
 class HTTPResponse {
 public:

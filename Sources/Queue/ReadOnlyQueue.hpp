@@ -7,7 +7,7 @@
 
 #include <optional>
 
-namespace ecspressp {
+namespace express_cpp {
 
 template<typename T>
 class ReadOnlyQueue {
@@ -15,6 +15,6 @@ public:
     virtual std::optional<T> Pop() = 0;
     virtual bool IsEmpty() const noexcept = 0;
 };
-} // ecspressp
+} // express_cpp
 
 #endif //ECSPRESSP_INPUTQUEUE_HPP

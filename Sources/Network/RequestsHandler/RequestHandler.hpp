@@ -12,7 +12,7 @@
 
 #include "Network/INetwork.hpp"
 
-namespace ecspressp {
+namespace express_cpp {
 
 using RouteCallback = std::function<void(const HTTPRequest &, HTTPResponse &
 )>;
@@ -45,6 +45,6 @@ private:
     Headers _globalHeaders;
     MethodsRegistry _methodsRegistry;
 };
-} // ecspressp
+} // express_cpp
 
 #endif //ECSPRESSP_REQUESTHANDLER_HPP

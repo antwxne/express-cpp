@@ -10,7 +10,7 @@
 
 #include "HttpResponse.hpp"
 
-namespace ecspressp {
+namespace express_cpp {
 void HTTPResponse::operator>>(std::vector<u_int8_t> &outputBuffer) const
 {
     std::string dest = std::format("{} {} {}\r\n", httpVersion, statusCode,

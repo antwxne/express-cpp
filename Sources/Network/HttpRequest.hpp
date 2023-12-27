@@ -9,7 +9,7 @@
 #include <map>
 #include <vector>
 
-namespace ecspressp {
+namespace express_cpp {
 
 struct HTTPRequest {
     ~HTTPRequest() = default;
@@ -21,6 +21,6 @@ struct HTTPRequest {
     HTTPRequest() = default;
     void operator<<(std::vector<u_int8_t> &rawRequest);
 };
-} // ecspressp
+} // express_cpp
 
 #endif //ECSPRESSP_HTTPREQUEST_HPP

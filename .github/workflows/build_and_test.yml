@@ -22,7 +22,7 @@ jobs:
             VCPKG_BOOTSTRAP_CMD: vcpkg/bootstrap-vcpkg.sh
     env:
       CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-      TARGET_NAME: ecspressp
+      TARGET_NAME: express-cpp
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v4
@@ -35,4 +35,4 @@ jobs:
       - name: Build project
         run: |
           cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-          cmake --build build --target ${{ env.TARGET_NAME }}
+          cmake --build build --target ${{ env.TARGET_NAME }} -j
