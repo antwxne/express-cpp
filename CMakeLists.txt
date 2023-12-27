@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.16)
 
 set(BIN_NAME express-cpp)
 set(CMAKE_CXX_STANDARD 20)
@@ -29,11 +29,10 @@ set(MAIN Sources/Main.cpp
 )
 set(SRC ${PICO_SRC}
         ${SRC}
-
 )
 
 add_library(${BIN_NAME} ${SRC})
-target_link_libraries(${BIN_NAME} PRIVATE asio::asio)
+target_link_libraries(${BIN_NAME} PUBLIC asio::asio)
 add_executable(a.out ${MAIN} ${SRC})
 target_link_libraries(a.out PRIVATE asio::asio)
 
