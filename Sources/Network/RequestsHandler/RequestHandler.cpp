@@ -30,13 +30,15 @@ void RequestHandler::HandleRequests(ReadOnlyQueue<Request> &requestQueue,
 )
 {
     while (requestQueue.IsEmpty());
-    const auto &maybeRequest = requestQueue.Pop();
+    const auto &&maybeRequest = requestQueue.Pop();
     if (!maybeRequest) {
         return;
     }
     Request request = maybeRequest.value();
     HTTPResponse newResponse;
     HTTPContext client_context = request.first;
+
+    newResponse.headers = _globalHeaders;
     try {
         _methodsRegistry.at(request.second.method).at(request.second.route)(
             request.second, newResponse);
@@ -46,6 +48,19 @@ void RequestHandler::HandleRequests(ReadOnlyQueue<Request> &requestQueue,
     Debug::log(std::format("{}:{} {} {} {}", request.first.remote_endpoint,
         request.first.port, request.second.method, request.second.route,
         newResponse.statusCode));
-    responseQueue.Push(Response(client_context, newResponse));
+    SetHeadersToResponse(newResponse);
+    responseQueue.Push(
+        Response(std::move(client_context), std::move(newResponse)));
+}
+
+void RequestHandler::SetHeadersToResponse(HTTPResponse &response)
+{
+    for (const auto &[name, value]: _globalHeaders) {
+        if (!response.headers.contains(
+            name)) { // to not override header set by the user
+            response.headers[name] = value;
+        }
+    }
+    response.headers["Content-Length"] = std::to_string(response.body.size());
 }
 } // ecspressp

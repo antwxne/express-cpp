@@ -21,7 +21,10 @@ void HTTPResponse::operator>>(std::vector<u_int8_t> &outputBuffer) const
     dest += "\r\n";
     outputBuffer.resize(dest.length() + body.size());
     std::memcpy(outputBuffer.data(), dest.data(), dest.length());
-    std::memcpy(&outputBuffer.at(dest.length() - 1), body.data(), body.size());
+    if (body.empty()) {
+        return;
+    }
+    std::memcpy(&outputBuffer.at(dest.length()), body.data(), body.size());
 }
 
 HTTPResponse &HTTPResponse::send(const std::string &str)

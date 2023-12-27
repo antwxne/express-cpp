@@ -86,7 +86,7 @@ void HTTP::Send(ReadOnlyQueue<Response> &responseQueue)
 {
     while (!responseQueue.IsEmpty()) {
         // this part will be so much prettier with pattern matching...
-        const auto &maybe_response = responseQueue.Pop();
+        const auto maybe_response = responseQueue.Pop();
         if (!maybe_response) {
             continue;
         }
@@ -128,7 +128,9 @@ bool HTTP::Client::operator==(const HTTPContext &context) const
 
 void HTTP::Client::operator<<(const HTTPResponse &response)
 {
+    auto a = 0;
     response >> sendBuffer;
+    auto b = 0;
     socket.async_send(asio::buffer(sendBuffer),
         [&]([[maybe_unused]]const asio::error_code &error,
             const std::size_t bytes_transfered

@@ -12,6 +12,7 @@
 namespace ecspressp {
 
 struct HTTPRequest {
+    ~HTTPRequest() = default;
     std::string httpVersion;
     std::string method;
     std::string route;

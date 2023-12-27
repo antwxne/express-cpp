@@ -16,7 +16,9 @@ namespace ecspressp {
 template<typename Network>
 class eCsPressPAPP {
 public:
-    eCsPressPAPP();
+    explicit eCsPressPAPP(int port = 8080,
+        const std::string appName = "eCsPressP_APP"
+    );
     void Start();
     RequestHandler &Router();
 
@@ -26,6 +28,12 @@ private:
     ecspressp::QueueImplem<ecspressp::Request> input_queue;
     ecspressp::QueueImplem<ecspressp::Response> output_queue;
 };
+
+template<typename Network>
+eCsPressPAPP<Network>::eCsPressPAPP(int port, const std::string appName)
+{
+    _requestHandler.SetGlobalHeaders({{"User-Agent", appName}});
+}
 
 template<typename Network>
 RequestHandler &eCsPressPAPP<Network>::Router()
@@ -44,11 +52,6 @@ void eCsPressPAPP<Network>::Start()
             std::ref(requestsQueue), std::ref(responsesQueue),
             std::ref(shouldStop)));
     _networkHandler.Start(requestsQueue, responsesQueue);
-}
-
-template<typename Network>
-eCsPressPAPP<Network>::eCsPressPAPP()
-{
 }
 }
 

@@ -15,12 +15,12 @@
 
 namespace ecspressp {
 
-template <typename T>
-class QueueImplem: public ReadOnlyQueue<T>, public WriteOnlyQueue<T> {
+template<typename T>
+class QueueImplem : public ReadOnlyQueue<T>, public WriteOnlyQueue<T> {
 public:
     QueueImplem() = default;
     QueueImplem(std::initializer_list<T> l);
-   std::optional<T> Pop();
+    std::optional<T> Pop();
     void Push(T &&elem);
     bool IsEmpty() const noexcept;
 private:
@@ -48,17 +48,17 @@ void QueueImplem<T>::Push(T &&elem)
 }
 
 template<typename T>
-std::optional<T>QueueImplem<T>::Pop()
+std::optional<T> QueueImplem<T>::Pop()
 {
     _mutex.lock();
     if (_data.size() == 0) {
         _mutex.unlock();
         return std::nullopt;
     }
-    T &front = _data.front();
+    T front = _data.front();
     _data.pop();
     _mutex.unlock();
-    return front;
+    return std::move(front);
 }
 }
 #endif //ECSPRESSP_QUEUEIMPLEM_HPP

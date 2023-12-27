@@ -16,9 +16,10 @@ namespace ecspressp {
 
 using RouteCallback = std::function<void(const HTTPRequest &, HTTPResponse &
 )>;
-
 using RoutesRegistry = std::unordered_map<std::string, RouteCallback>;
 using MethodsRegistry = std::unordered_map<std::string, RoutesRegistry>;
+
+using Headers = std::map<std::string, std::string>;
 
 class RequestHandler {
 public:
@@ -29,12 +30,19 @@ public:
         WriteOnlyQueue<Response> &responseQueue, bool &shouldStop
     );
 
+    void SetGlobalHeaders(Headers &&headers)
+    {
+        _globalHeaders = headers;
+    };
+
 private:
     void HandleRequests(ReadOnlyQueue<Request> &requestQueue,
         WriteOnlyQueue<Response> &responseQueue
     );
+    void SetHeadersToResponse(HTTPResponse &response);
 
 private:
+    Headers _globalHeaders;
     MethodsRegistry _methodsRegistry;
 };
 } // ecspressp

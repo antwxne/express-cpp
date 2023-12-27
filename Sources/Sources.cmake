@@ -10,7 +10,6 @@ set(TOOLS_SRC
 
 set(SRC
         ${TOOLS_SRC}
-        Sources/ECsPressPapp.cpp
         Sources/ECsPressPapp.hpp
         Sources/Network/HTTP.cpp
         Sources/Network/HTTP.hpp
