@@ -2,6 +2,8 @@
 // Created by antoine on 18/12/23.
 //
 
+#include <format>
+
 #include "HTTP.hpp"
 #include "Debug/Debug.hpp"
 
