@@ -66,6 +66,7 @@ if (NOT express-cpp_POPULATED)
 FetchContent_Populate(express-cpp)
 endif ()
 add_subdirectory(${express-cpp_SOURCE_DIR})
+include_directories(${express-cpp_SOURCE_DIR}/Sources)
 ...
 target_link_libraries(<target> PRIVATE express-cpp)
 ```

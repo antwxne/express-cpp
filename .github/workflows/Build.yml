@@ -12,14 +12,13 @@ jobs:
   build-ubuntu:
     name: Build project (ubuntu)
     runs-on: ubuntu-latest
-    #    container:
-    #      image: "antwxne/cmake:3.16.0"
+    container:
+      image: "antwxne/cmake:3.16.0"
     env:
       TARGET_NAME: express-cpp
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get install -y gcc-13 g++-13
       - name: Build project
         run: |
           cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
