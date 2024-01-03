@@ -31,7 +31,7 @@ set(SRC ${PICO_SRC}
 )
 
 add_library(${BIN_NAME} ${SRC})
-target_link_libraries(${BIN_NAME} PUBLIC asio)
+target_link_libraries(${BIN_NAME} PUBLIC asio picohttpparser)
 add_executable(a.out ${MAIN} ${SRC})
 target_link_libraries(a.out PRIVATE asio)
 
