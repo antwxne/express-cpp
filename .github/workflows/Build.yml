@@ -10,7 +10,7 @@ on:
       - main
 jobs:
   build-ubuntu:
-    name: Build project
+    name: Build project (ubuntu)
     runs-on: ubuntu-latest
     container:
       image: "gcc:12.3.0"
@@ -26,7 +26,7 @@ jobs:
           cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           cmake --build build --target ${{ env.TARGET_NAME }} -j
   build-windows:
-    name: Build project
+    name: Build project (Windows)
     runs-on: windows-latest
     env:
       TARGET_NAME: express-cpp
