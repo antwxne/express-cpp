@@ -12,6 +12,8 @@ jobs:
   build-ubuntu:
     name: Build project
     runs-on: ${{ matrix.os }}
+    container:
+      image: "gcc:12.3.0"
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
