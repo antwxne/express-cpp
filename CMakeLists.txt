@@ -18,21 +18,15 @@ else ()
     endif ()
 endif ()
 
-
 project(express-cpp)
-include(lib/pico.cmake)
+include(Deps/PicoHTTPParser.cmake)
+include(Deps/Asio.cmake)
 include(Sources/Sources.cmake)
 
-set(MAIN Sources/Main.cpp
+include_directories(Sources)
 
-)
 set(SRC ${SRC}
 )
 
 add_library(${BIN_NAME} ${SRC})
 target_link_libraries(${BIN_NAME} PUBLIC asio picohttpparser)
-target_include_directories(${BIN_NAME} INTERFACE Sources/)
-add_executable(a.out ${MAIN} ${SRC})
-target_link_libraries(a.out PUBLIC asio picohttpparser)
-
-include(Tests/Tests.cmake)
