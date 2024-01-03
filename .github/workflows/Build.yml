@@ -13,7 +13,7 @@ jobs:
     name: Build project (ubuntu)
     runs-on: ubuntu-latest
     container:
-      image: "gcc:12.3.0"
+      image: "antwxne/cmake:3.16.0"
     env:
       TARGET_NAME: express-cpp
       BUILD_TYPE: Release
