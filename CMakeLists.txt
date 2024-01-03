@@ -20,7 +20,6 @@ endif ()
 
 
 project(express-cpp)
-find_package(asio CONFIG REQUIRED)
 include(lib/pico.cmake)
 include(Sources/Sources.cmake)
 
@@ -32,8 +31,8 @@ set(SRC ${PICO_SRC}
 )
 
 add_library(${BIN_NAME} ${SRC})
-target_link_libraries(${BIN_NAME} PUBLIC asio::asio)
+target_link_libraries(${BIN_NAME} PUBLIC asio)
 add_executable(a.out ${MAIN} ${SRC})
-target_link_libraries(a.out PRIVATE asio::asio)
+target_link_libraries(a.out PRIVATE asio)
 
 include(Tests/Tests.cmake)

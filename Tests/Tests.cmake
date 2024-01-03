@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(googletest)
 set(UNIT_TESTS_BIN_NAME unit_tests)
 
 add_executable(${UNIT_TESTS_BIN_NAME} ${SRC} ${TESTS_SRC})
-target_link_libraries(${UNIT_TESTS_BIN_NAME} PRIVATE asio::asio GTest::gtest_main)
+target_link_libraries(${UNIT_TESTS_BIN_NAME} PRIVATE asio GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(${UNIT_TESTS_BIN_NAME})

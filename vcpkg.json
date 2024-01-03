@@ -1,7 +1,0 @@
-{
-  "dependencies": [
-    "asio"
-  ],
-  "name": "express-cpp",
-  "version": "1"
-}

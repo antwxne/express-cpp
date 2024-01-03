@@ -10,7 +10,7 @@
 
 #include "Queue/QueueImplem.hpp"
 #include "Network/RequestsHandler/RequestHandler.hpp"
-#include "Network/INetwork.hpp"
+#include "Network/HTTP.hpp"
 
 namespace express_cpp {
 struct Config {
@@ -18,7 +18,7 @@ struct Config {
     {
         port = 8080;
         address = "0.0.0.0";
-        appName = "eCsPressP";
+        appName = "Express-CPP_APP";
         threadsNumber = 1;
     }
 
