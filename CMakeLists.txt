@@ -19,6 +19,7 @@ else ()
 endif ()
 
 project(express-cpp)
+Set(FETCHCONTENT_QUIET FALSE)
 include(Deps/PicoHTTPParser.cmake)
 include(Deps/Asio.cmake)
 include(Sources/Sources.cmake)

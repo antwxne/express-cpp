@@ -1,7 +1,8 @@
 include(FetchContent)
 FetchContent_Declare(asio
-        GIT_REPOSITORY git@github.com:chriskohlhoff/asio.git
+        GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
         GIT_TAG master
+        GIT_PROGRESS TRUE
 )
 FetchContent_GetProperties(asio)
 if (NOT asio_POPULATED)

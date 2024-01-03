@@ -3,6 +3,7 @@ include(FetchContent)
 FetchContent_Declare(picohttpparser
         GIT_REPOSITORY https://github.com/h2o/picohttpparser.git
         GIT_TAG master
+        GIT_PROGRESS TRUE
 )
 FetchContent_GetProperties(picohttpparser)
 if (NOT picohttpparser_POPULATED)
