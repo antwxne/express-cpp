@@ -30,6 +30,7 @@ struct Config {
 
 template<typename Network>
 class ExpressCPPApp {
+    static_assert(std::is_base_of<INetwork, Network>());
 public:
     explicit ExpressCPPApp(const Config &config);
     explicit ExpressCPPApp() = default;

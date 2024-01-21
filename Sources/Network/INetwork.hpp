@@ -25,6 +25,11 @@ using Response = std::pair<HTTPContext, HTTPResponse>;
 
 class INetwork {
 public:
+    /**
+     * This method will be call when the server will start.
+     * @param requestQueue will be filled with requests received by the server.
+     * @param responseQueue will be consumed and send by the server.
+     */
     virtual void Start(express_cpp::WriteOnlyQueue<Request> &requestQueue,
         ReadOnlyQueue<Response> &responseQueue
     ) = 0;
