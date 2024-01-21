@@ -53,20 +53,18 @@ cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-...
 include(FetchContent)
 Set(FETCHCONTENT_QUIET FALSE)
 FetchContent_Declare(express-cpp
-GIT_REPOSITORY git@github.com:antwxne/express-cpp.git
-GIT_TAG master
-GIT_PROGRESS TRUE
+        GIT_REPOSITORY https://github.com/antwxne/express-cpp.git
+        GIT_TAG master
+        GIT_PROGRESS TRUE
 )
 FetchContent_GetProperties(express-cpp)
 if (NOT express-cpp_POPULATED)
-FetchContent_Populate(express-cpp)
+    FetchContent_Populate(express-cpp)
 endif ()
 add_subdirectory(${express-cpp_SOURCE_DIR})
 include_directories(${express-cpp_SOURCE_DIR}/Sources)
-...
 target_link_libraries(<target> PRIVATE express-cpp)
 ```
