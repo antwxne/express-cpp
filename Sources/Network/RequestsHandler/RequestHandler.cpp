@@ -125,6 +125,9 @@ void RequestHandler::GetStaticFile(const HTTPRequest &request,
 )
 {
     CheckStaticPath(request.route);
+    if (request.method != "GET") {
+        throw std::runtime_error("Static file bad method");
+    }
     for (const auto &staticFolder: _staticPaths) {
         std::string path = std::format("{}/{}", staticFolder, request.route);
         std::ifstream file(path, std::ios::binary);
