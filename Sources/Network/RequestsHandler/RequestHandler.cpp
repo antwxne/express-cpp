@@ -124,6 +124,7 @@ void RequestHandler::GetStaticFile(const HTTPRequest &request,
     HTTPResponse &response
 )
 {
+    CheckStaticPath(request.route);
     for (const auto &staticFolder: _staticPaths) {
         std::string path = std::format("{}/{}", staticFolder, request.route);
         std::ifstream file(path, std::ios::binary);
@@ -137,5 +138,13 @@ void RequestHandler::GetStaticFile(const HTTPRequest &request,
     }
     throw std::runtime_error(
         std::format("file: {} not found in the server", request.route));
+}
+
+void RequestHandler::CheckStaticPath(const std::string &path)
+{
+    if (path.find("..") == std::string::npos) {
+        throw (std::runtime_error(
+            std::format("Error: {}. Directory traversal detected.", path)));
+    }
 }
 } // express_cpp

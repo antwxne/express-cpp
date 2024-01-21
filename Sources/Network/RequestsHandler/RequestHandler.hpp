@@ -60,6 +60,7 @@ private:
     );
     void SetHeadersToResponse(HTTPResponse &response);
     void GetStaticFile(const HTTPRequest &request, HTTPResponse &response);
+    static void CheckStaticPath(const std::string &path);
 
 private:
     std::vector<std::string> _staticPaths;
