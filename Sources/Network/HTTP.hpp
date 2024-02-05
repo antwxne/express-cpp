@@ -20,10 +20,14 @@ private:
         void operator>>(HTTPContext &context) const;
         bool operator==(const HTTPContext &context) const;
         void operator<<(const HTTPResponse &response);
+        void Disconnect();
+        bool Connected() const;
     public:
         asio::ip::tcp::socket socket;
         std::vector<uint8_t> readBuffer;
         std::vector<uint8_t> sendBuffer;
+    private:
+        bool _is_connected;
     };
 
 public:
@@ -48,6 +52,7 @@ private:
     static asio::ip::address_v4::bytes_type ParseAddress(
         const std::string &address
     );
+    void DisconnectClients();
 
 private:
     asio::io_context _io_context;

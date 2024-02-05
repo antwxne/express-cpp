@@ -31,3 +31,6 @@ set(SRC ${SRC}
 
 add_library(${BIN_NAME} ${SRC})
 target_link_libraries(${BIN_NAME} PUBLIC asio picohttpparser)
+
+add_executable(PLOP Main.cpp)
+target_link_libraries(PLOP ${BIN_NAME})

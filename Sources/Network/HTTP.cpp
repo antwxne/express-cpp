@@ -20,6 +20,7 @@ void HTTP::Start(express_cpp::WriteOnlyQueue<Request> &requestQueue,
 {
     StartAccept(requestQueue);
     _io_context.post(std::bind(&HTTP::Send, this, std::ref(responseQueue)));
+    _io_context.post(std::bind(&HTTP::DisconnectClients, this));
     Debug::log(std::format("Server listening on http://{}:{}",
         _acceptor.local_endpoint().address().to_string(),
         _acceptor.local_endpoint().port()));
@@ -48,6 +49,7 @@ void HTTP::AcceptHandler(Client &client,
 {
     if (client.GetSocketFd() < 0) {
         Debug::err("Cannot connect with new client");
+        client.Disconnect();
         return;
     }
     Debug::log("HTTP Client connected");
@@ -75,6 +77,7 @@ void HTTP::ReceiveHandler(Client &client,
 {
     if (error == asio::error::eof) {
         Debug::log("Client disconnected");
+        client.Disconnect();
         return;
     }
     Debug::log(std::to_string(bytes_transfered) + " bytes received");
@@ -91,7 +94,6 @@ void HTTP::ReceiveHandler(Client &client,
 void HTTP::Send(ReadOnlyQueue<Response> &responseQueue)
 {
     while (!responseQueue.IsEmpty()) {
-        // this part will be so much prettier with pattern matching...
         const auto maybe_response = responseQueue.Pop();
         if (!maybe_response) {
             continue;
@@ -110,16 +112,33 @@ void HTTP::Send(ReadOnlyQueue<Response> &responseQueue)
     _io_context.post(std::bind(&HTTP::Send, this, std::ref(responseQueue)));
 }
 
+/**
+ *
+ * @param address
+ * @return the asio ipV4 address
+ *
+ * inspired from https://stackoverflow.com/a/5328190
+ */
 asio::ip::address_v4::bytes_type HTTP::ParseAddress(const std::string &address)
 {
-    // from https://stackoverflow.com/a/5328190
     std::stringstream s(address);
-    int a, b, c, d; //to store the 4 ints
-    char ch; //to temporarily store the '.'
+    int a, b, c, d;
+    char ch;
     s >> a >> ch >> b >> ch >> c >> ch >> d;
     return asio::ip::address_v4::bytes_type(
         {static_cast<uint8_t>(a), static_cast<uint8_t>(b),
             static_cast<uint8_t>(c), static_cast<uint8_t>(d)});
+}
+
+/**
+ * Disconnect clients when they close the socket
+ */
+void HTTP::DisconnectClients()
+{
+    std::erase_if(_clients, [](const std::unique_ptr<Client> &client) -> bool {
+        return !client->Connected();
+    });
+    _io_context.post(std::bind(&HTTP::DisconnectClients, this));
 }
 
 int HTTP::Client::GetSocketFd()
@@ -127,7 +146,8 @@ int HTTP::Client::GetSocketFd()
     return socket.native_handle();
 }
 
-HTTP::Client::Client(asio::io_context &ioContext) : socket(ioContext)
+HTTP::Client::Client(asio::io_context &ioContext) : socket(ioContext),
+    _is_connected(true)
 {
 }
 
@@ -155,5 +175,15 @@ void HTTP::Client::operator<<(const HTTPResponse &response)
             Debug::log(std::format("{} bytes sent to {}:{}", bytes_transfered,
                 client_endpoint.address().to_string(), client_endpoint.port()));
         });
+}
+
+void HTTP::Client::Disconnect()
+{
+    _is_connected = false;
+}
+
+bool HTTP::Client::Connected() const
+{
+    return _is_connected;
 }
 } // express_cpp
