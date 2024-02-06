@@ -6,6 +6,7 @@
 
 #include "HTTP.hpp"
 #include "Debug/Debug.hpp"
+#include "Exceptions/HttpException.hpp"
 
 namespace express_cpp {
 HTTP::HTTP(uint16_t port, const std::string &address)
@@ -57,6 +58,11 @@ void HTTP::AcceptHandler(Client &client,
     StartAccept(requestQueue);
 }
 
+/**
+ * @brief set the async read callback for the curent client
+ * @param client the curent client
+ * @param requestQueue
+ */
 void HTTP::StartReceive(Client &client,
     express_cpp::WriteOnlyQueue<Request> &requestQueue
 )
@@ -70,12 +76,19 @@ void HTTP::StartReceive(Client &client,
             std::placeholders::_2));
 }
 
+/**
+ * @brief Callback when receiving content
+ * @param client the curent client sending the content
+ * @param requestQueue the request queue that will be feed
+ * @param error asio error code
+ * @param bytes_transfered
+ */
 void HTTP::ReceiveHandler(Client &client,
     express_cpp::WriteOnlyQueue<Request> &requestQueue,
     const std::error_code error, std::size_t bytes_transfered
 )
 {
-    if (error == asio::error::eof) {
+    if (error == asio::error::eof || bytes_transfered > 3000) {
         Debug::log("Client disconnected");
         client.Disconnect();
         return;
@@ -84,13 +97,25 @@ void HTTP::ReceiveHandler(Client &client,
     HTTPRequest httpRequest;
     HTTPContext context;
 
-    httpRequest << client.readBuffer;
-    client >> context;
-    requestQueue.Push(Request(context, httpRequest));
-    client.readBuffer.clear();
+    try {
+        httpRequest << client.readBuffer;
+        client >> context;
+        requestQueue.Push(Request(context, httpRequest));
+        client.readBuffer.clear();
+    } catch (const HTTPException &exception) {
+        HTTPResponse errorResponse;
+        client
+            << errorResponse.status(exception.status_code, exception.message);
+    }
     StartReceive(client, requestQueue);
 }
 
+/**
+ *
+ * @param responseQueue response to send
+ *
+ * @brief send response to a client
+ */
 void HTTP::Send(ReadOnlyQueue<Response> &responseQueue)
 {
     while (!responseQueue.IsEmpty()) {
@@ -131,7 +156,7 @@ asio::ip::address_v4::bytes_type HTTP::ParseAddress(const std::string &address)
 }
 
 /**
- * Disconnect clients when they close the socket
+ * @brief Disconnect clients when they close the socket
  */
 void HTTP::DisconnectClients()
 {

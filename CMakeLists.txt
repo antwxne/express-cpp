@@ -27,6 +27,7 @@ include(Sources/Sources.cmake)
 include_directories(Sources)
 
 set(SRC ${SRC}
+
 )
 
 add_library(${BIN_NAME} ${SRC})

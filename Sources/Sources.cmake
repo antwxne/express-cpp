@@ -4,6 +4,8 @@ set(TOOLS_SRC
         Sources/Debug/Debug.hpp
         Sources/Exceptions/MyException.cpp
         Sources/Exceptions/MyException.hpp
+        Sources/Exceptions/HttpException.cpp
+        Sources/Exceptions/HttpException.hpp
         Sources/Queue/WriteOnlyQueue.hpp
         Sources/Queue/QueueImplem.cpp
         Sources/Queue/QueueImplem.hpp)

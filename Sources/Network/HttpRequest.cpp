@@ -6,6 +6,7 @@
 
 #include <picohttpparser.h>
 #include "HttpRequest.hpp"
+#include "Exceptions/HttpException.hpp"
 
 namespace express_cpp {
 void HTTPRequest::operator<<(std::vector<u_int8_t> &rawRequest
@@ -24,9 +25,12 @@ void HTTPRequest::operator<<(std::vector<u_int8_t> &rawRequest
     buffer.resize(rawRequest.size());
     std::memcpy(buffer.data(), rawRequest.data(), rawRequest.size());
 
-    phr_parse_request(buffer.data(), rawRequest.size(), &requestMethod,
-        &methodLen, &path, &pathLen, &minorVersion, requestHeaders,
-        &requestHeadersLen, 0);
+    const int is_request_valid = phr_parse_request(buffer.data(),
+        rawRequest.size(), &requestMethod, &methodLen, &path, &pathLen,
+        &minorVersion, requestHeaders, &requestHeadersLen, 0);
+    if (is_request_valid == -1) {
+        throw HTTPException(503, "Error: Not a HTTP request");
+    }
     httpVersion = "1." + std::to_string(minorVersion);
     method = requestMethod;
     method.resize(methodLen);
