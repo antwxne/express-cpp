@@ -10,23 +10,10 @@
 
 #include "Queue/QueueImplem.hpp"
 #include "Network/RequestsHandler/RequestHandler.hpp"
-#include "Network/HTTP.hpp"
+#include "Network/INetwork.hpp"
+#include "Config.hpp"
 
 namespace express_cpp {
-struct Config {
-    Config()
-    {
-        port = 8080;
-        address = "0.0.0.0";
-        appName = "Express-CPP_APP";
-        threadsNumber = 1;
-    }
-
-    short port;
-    std::string address;
-    std::string appName;
-    std::size_t threadsNumber;
-};
 
 template<typename Network>
 class ExpressCPPApp {
@@ -46,10 +33,11 @@ private:
 };
 
 template<typename Network>
-ExpressCPPApp<Network>::ExpressCPPApp(const Config &config): _networkHandler(
-    config.port, config.address), _requestHandler(), _input_queue(),
-    _output_queue(), _threadsNumber(config.threadsNumber)
+ExpressCPPApp<Network>::ExpressCPPApp(const Config &config)
+    : _networkHandler(), _requestHandler(), _input_queue(), _output_queue(),
+    _threadsNumber(config.threadsNumber)
 {
+    _networkHandler.Init(config);
     _requestHandler.SetGlobalHeaders({{"User-Agent", config.appName}});
 }
 

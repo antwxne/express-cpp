@@ -31,11 +31,12 @@ private:
     };
 
 public:
-    HTTP(uint16_t port = 8080, const std::string &address = "0.0.0.0");
+    HTTP();
     ~HTTP() = default;
+    INetwork &Init(const express_cpp::Config &server_config) final;
     void Start(express_cpp::WriteOnlyQueue<Request> &requestQueue,
         ReadOnlyQueue<Response> &responseQueue
-    ) override final;
+    ) final;
 private:
     void StartAccept(express_cpp::WriteOnlyQueue<Request> &requestQueue);
     void AcceptHandler(Client &client,
@@ -58,6 +59,7 @@ private:
     asio::io_context _io_context;
     asio::ip::tcp::acceptor _acceptor;
     std::vector<std::unique_ptr<Client>> _clients;
+    Config _serverConfig;
 };
 } // express_cpp
 

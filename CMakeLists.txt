@@ -27,11 +27,13 @@ include(Sources/Sources.cmake)
 include_directories(Sources)
 
 set(SRC ${SRC}
+        Sources/Config.cpp
+        Sources/Config.hpp
 
 )
 
 add_library(${BIN_NAME} ${SRC})
 target_link_libraries(${BIN_NAME} PUBLIC asio picohttpparser)
 
-add_executable(PLOP Main.cpp)
-target_link_libraries(PLOP ${BIN_NAME})
+#add_executable(PLOP Main.cpp)
+#target_link_libraries(PLOP ${BIN_NAME})

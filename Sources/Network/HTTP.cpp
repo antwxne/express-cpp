@@ -9,10 +9,17 @@
 #include "Exceptions/HttpException.hpp"
 
 namespace express_cpp {
-HTTP::HTTP(uint16_t port, const std::string &address)
-    : _io_context(), _acceptor(_io_context,
-    asio::ip::tcp::endpoint(asio::ip::address_v4(ParseAddress(address)), port))
+HTTP::HTTP() : _io_context(), _acceptor(_io_context)
 {
+}
+
+INetwork &HTTP::Init(const Config &server_config)
+{
+    _acceptor = asio::ip::tcp::acceptor(_io_context, asio::ip::tcp::endpoint(
+        asio::ip::address_v4(ParseAddress(server_config.address)),
+        server_config.port));
+    _serverConfig = server_config;
+    return *this;
 }
 
 void HTTP::Start(express_cpp::WriteOnlyQueue<Request> &requestQueue,
@@ -60,7 +67,7 @@ void HTTP::AcceptHandler(Client &client,
 
 /**
  * @brief set the async read callback for the curent client
- * @param client the curent client
+ * @param client the current client
  * @param requestQueue
  */
 void HTTP::StartReceive(Client &client,
@@ -78,7 +85,7 @@ void HTTP::StartReceive(Client &client,
 
 /**
  * @brief Callback when receiving content
- * @param client the curent client sending the content
+ * @param client the current client sending the content
  * @param requestQueue the request queue that will be feed
  * @param error asio error code
  * @param bytes_transfered
@@ -88,12 +95,12 @@ void HTTP::ReceiveHandler(Client &client,
     const std::error_code error, std::size_t bytes_transfered
 )
 {
-    if (error == asio::error::eof || bytes_transfered > 3000) {
+    if (error == asio::error::eof ||
+        bytes_transfered > _serverConfig.maxRequestSize) {
         Debug::log("Client disconnected");
         client.Disconnect();
         return;
     }
-    Debug::log(std::to_string(bytes_transfered) + " bytes received");
     HTTPRequest httpRequest;
     HTTPContext context;
 

@@ -9,6 +9,7 @@
 #include "Queue/ReadOnlyQueue.hpp"
 #include "Network/HttpRequest.hpp"
 #include "Network/HttpResponse.hpp"
+#include "Config.hpp"
 
 namespace express_cpp {
 
@@ -25,6 +26,12 @@ using Response = std::pair<HTTPContext, HTTPResponse>;
 
 class INetwork {
 public:
+    /**
+     *
+     * @param server_config store the server configuration
+     * @return the current instance
+     */
+    virtual INetwork &Init(const Config &server_config) = 0;
     /**
      * This method will be call when the server will start.
      * @param requestQueue will be filled with requests received by the server.
