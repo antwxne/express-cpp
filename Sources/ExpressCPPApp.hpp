@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <type_traits>
+#include <algorithm>
 
 #include "Queue/QueueImplem.hpp"
 #include "Network/RequestsHandler/RequestHandler.hpp"
